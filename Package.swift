@@ -1,0 +1,18 @@
+// swift-tools-version:5.9
+import PackageDescription
+
+let package = Package(
+    name: "ClaudeNotifier",
+    platforms: [.macOS(.v14)],
+    targets: [
+        .executableTarget(
+            name: "ClaudeNotifier",
+            path: "src",
+            exclude: ["Info.plist"],
+            linkerSettings: [
+                .linkedFramework("Cocoa"),
+                .linkedFramework("UserNotifications")
+            ]
+        )
+    ]
+)
