@@ -10,6 +10,8 @@ Built with Swift using `UNUserNotificationCenter` — replaces `terminal-notifie
 - **Click-to-focus** specific VS Code project window via `NSWorkspace.open`
 - **Programmatic dismiss** via `remove` command
 - **Group-based notification management** (same group replaces previous)
+- **IDE focus detection** — skips notifications when VS Code/Cursor is active
+- **VS Code icon** on notification banners
 - **No Dock icon** — runs as accessory app (`LSUIElement`)
 
 ## Requirements
@@ -37,27 +39,33 @@ Request notification permissions (run once):
 open ~/.claude/notifier/ClaudeNotifier.app --args setup
 ```
 
-Then go to **System Settings → Notifications → ClaudeNotifier** and set style to **Alerts** (not Banners).
+Then go to **System Settings > Notifications > ClaudeNotifier** and set style to **Alerts** (not Banners).
 
 ## Usage
+
+Run the binary directly in background (`&`) to avoid focus-stealing side effects of `open`:
+
+```bash
+NOTIFIER_BIN="$HOME/.claude/notifier/ClaudeNotifier.app/Contents/MacOS/ClaudeNotifier"
+```
 
 ### Send a notification
 
 ```bash
-open -g ~/.claude/notifier/ClaudeNotifier.app --args send \
+"$NOTIFIER_BIN" send \
   --title "Title" \
   --message "Body text" \
   --subtitle "Subtitle" \
   --sound "default" \
   --group "my-group" \
-  --project-dir "/path/to/project"
+  --project-dir "/path/to/project" &
 ```
 
 ### Remove a notification
 
 ```bash
-open -g ~/.claude/notifier/ClaudeNotifier.app --args remove --group "my-group"
-open -g ~/.claude/notifier/ClaudeNotifier.app --args remove --all
+"$NOTIFIER_BIN" remove --group "my-group" &
+"$NOTIFIER_BIN" remove --all &
 ```
 
 ## Claude Code Hooks Integration
